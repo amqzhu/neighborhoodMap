@@ -2,6 +2,59 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Cat Clicker</title>
+	<title>Neighbourhood Map of London</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://maps.googleapis.com/maps/api/js"></script>
+	<script>
+		function initialize() {
+			var mapCanvas = document.getElementById('map-canvas');
+			var myLatLng = new google.maps.LatLng(51.5072, 0.1275);
+			var mapOptions = {
+				center: myLatLng,
+				zoom: 10,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			}
+			var map = new google.maps.Map(mapCanvas,mapOptions);
+			
+			var marker = new google.maps.Marker({
+				position: myLatLng,
+				map: map,
+				title: 'Hello World!'
+			});
+		}
+		google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
 </head>
+
 <body>
+	<div class="container">
+		<div class="row">
+			<form id="form-container" class="form-container">
+				<label for="poi">Point of Interest: </label><input type="text" id="poi" value="">
+				<button id="submit-btn">Submit</button>
+			</form>
+		</div>
+
+		<div class="row" id="map-canvas"></div>
+		
+		<div class="row">
+			<div class="col-md-4">
+				<ul data-bind="foreach: placeList">
+					<li data-bind="text: name, click: $parent.setPlace"></li>
+				</ul>
+				<a href="http://google.com/">google</a>
+				<h2 id="greeting" class="greeting">Where do you want to live?</h2>
+			</div>
+			<div class="col-md-8 wikipedia-container">
+				<h3 id="wikipedia-header">Relevant Wikipedia Article</h3>
+				<ul id="wikipedia-links">Type in a point of interest above and find relevant Wikipedia articles here!</ul>
+			</div>
+		</div>
+	</div>
+	<script src="js/libs/jquery-1.11.3.js"></script>
+
+	<script src="js/libs/knockout-3.2.0.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>
