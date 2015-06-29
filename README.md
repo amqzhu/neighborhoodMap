@@ -6,3 +6,5 @@ REFERENCES:
 https://developers.google.com/maps/tutorials/fundamentals/adding-a-google-map
 https://developers.google.com/maps/documentation/javascript/examples/marker-simple
 http://www.smashingmagazine.com/2008/12/04/designing-the-holy-search-box-examples-and-best-practices/
+http://jsfiddle.net/JTimperley/pyCTN/13/
+http://knockoutjs.com/documentation/introduction.html
