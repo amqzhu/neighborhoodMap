@@ -13,31 +13,43 @@
 	<div class="container">
 		<div class="row">
 			<h2 id="greeting" class="greeting">Where do you want to explore?</h2>
-			<p>Please type the name of a place from the list below</p>
-			<form id="form-container" class="form-container" data-bind="submit: setPlace">
-				<label for="poi">Point of Interest: </label><input type="text" id="poi" value="">
-				<button type="submit" id="submit-btn">Submit</button>
-			</form>
 		</div>
-
-		<div class="row" id="map-canvas"></div>
 
 		<div class="row" data-bind="with: currentPlace">
 			<h2 data-bind="text: name"></h2>
 		</div>
-
+		
 		<div class="row">
 			<div class="col-md-4">
-				<h3>Places!</h3>
+			<!--
+				<p>Please type the name of a place from the list below</p>
+				<form id="form-container" class="form-container" data-bind="textInput: setPlace">
+					<label for="poi">Point of Interest: </label><input type="text" id="poi" value="">
+					<button id="submit-btn">Submit</button>
+				</form>
+-->
+				<div data-bind="foreach: filter.filters">
+					<div>
+						<span data-bind="text: Name"></span>:<br />
+					</div>
+					<div data-bind="if: Type == 'text'">
+						<input type="text" data-bind="value: Value, valueUpdate: 'afterkeydown'" />
+					</div>
+				</div>
+				<h3>Key places!</h3>
 				<ul data-bind="foreach: placeList">
 					<li data-bind="text: name, click: $parent.setPlace"></li>
 				</ul>
-			</div>
-			<div class="col-md-8 wikipedia-container">
+				
+				<div class="wikipedia-container">
 				<h3 id="wikipedia-header">Relevant Wikipedia Articles</h3>
 				<ul id="wikipedia-links">Type in a point of interest above and find relevant Wikipedia articles here!</ul>
+				</div>
 			</div>
+			<div class="col-md-8" id="map-canvas"></div>
 		</div>
+
+
 	</div>
 	<script src="js/libs/jquery-1.11.3.js"></script>
 	<script src="js/libs/knockout-3.2.0.js"></script>
