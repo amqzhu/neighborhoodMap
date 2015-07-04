@@ -2,11 +2,12 @@
 var Place = function(data) {
 	var self = this;
 	self.name = data.name;
-	self.latLang = data.latLang;
+	self.lat = data.lat;
+	self.lon = data.lon;
 };
 
 // this is the ViewModel
-function PlacePageModel(data) {
+var PlacePageModel = function(data) {
 	var self = this;
 	this.placeList = ko.observableArray([]);
 
@@ -28,13 +29,14 @@ function PlacePageModel(data) {
 		$wikiElem.text("");
 
 		var poiStr=String(place.name);
-
 		var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + poiStr + '&format=json&callback=wikiCallback';
 
+		// error handling, will show text if articles fail to load
 		var wikiRequestTimeout = setTimeout(function() {
-		$wikiElem.text("failed to get wikipedia resources");
+			$wikiElem.text("failed to get wikipedia resources");
 		}, 5000);
 
+		// make ajax call to wikiURL and append results to DOM wiki element
 		$.ajax({
 			url: wikiUrl,
 			dataType: "jsonp",
@@ -50,19 +52,21 @@ function PlacePageModel(data) {
 		});
 		return false;
 	};
-	// create filter for the place list
+
+	// create filters for the place list
 	var filters = [{
 			Type: "text",
 			Name: "Name",
 			Value: ko.observable(""),
 			RecordValue: function(record) { return record.name; }
 		}];
+
 	self.filter = new Filter(filters, this.placeList);
 	self.pager = new PagerModel(self.filter.filteredRecords);
 };
 
 // model that represents the returned records from filtering
-function PagerModel(records) {
+var PagerModel = function(records) {
 	var self = this;
 	self.records = GetObservableArray(records);
 
@@ -71,11 +75,13 @@ function PagerModel(records) {
 	}).extend({ throttle: 5 });
 };
 
-// 
-function Filter(filters, records) {
+// compare values of search and place names, and only return the matching ones as filtered
+var Filter = function(filters, records) {
 	var self = this;
 	self.records = GetObservableArray(records);
 	self.filters = ko.observableArray(filters);
+	// compare the name of each place to the user-input text string
+	// if they match, mark the place as having passed the filter
 	self.activeFilters = ko.computed(function() {
 		var filters = self.filters();
 		var activeFilters = [];
@@ -93,7 +99,7 @@ function Filter(filters, records) {
 							var recordValue = filter.RecordValue(record);
 							recordValue = recordValue.toUpperCase();
 							return recordValue.indexOf(filterValue) == -1;
-						};
+						}
 					};
 					activeFilters.push(activeFilter);
 				};
@@ -101,13 +107,11 @@ function Filter(filters, records) {
 		};
 		return activeFilters;
 	});
+	// go through each record in the list, and get whether it was filtered from the previous step
+	// if it is filtered, do not include in the new list that gets returned to the view 
 	self.filteredRecords = ko.computed(function() {
 		var records = self.records();
 		var filters = self.activeFilters();
-		if (filters.length == 0) {
-			return records;
-		};
-		
 		var filteredRecords = [];
 		for (var rIndex = 0; rIndex < records.length; rIndex++) {
 			var isIncluded = true;
@@ -128,41 +132,47 @@ function Filter(filters, records) {
 	}).extend({ throttle: 200 });
 };
 
-
-function GetObservableArray(array) {
+// method to create ko.observableArray even if original input is not an array
+var GetObservableArray = function(array) {
 	if (typeof(array) == 'function');{
 		return array;
 	};
 	return ko.observableArray(array);
 };
 
-// save all the points of interest in an array
+// save all the points of interest
 var places = [
 {
 	name: 'Buckingham Palace',
-	latLang: new google.maps.LatLng(51.5014, -0.1419)
+	lat: 51.5014,
+	lon: -0.1419
 }, 
 {
 	name: 'Kensington Gardens',
-	latLang: new google.maps.LatLng(51.5070, -0.1792)
+	lat: 51.5070,
+	lon: -0.1792
 }, 
 {
 	name: 'The British Museum',
-	latLang: new google.maps.LatLng(51.5192, -0.1243)
+	lat: 51.5192, 
+	lon: -0.1243
 }, 
 {
 	name: 'Royal Albert Hall',
-	latLang: new google.maps.LatLng(51.4941, -0.1739)
+	lat: 51.4941, 
+	lon: -0.1739
 }, 
 {
 	name: 'Piccadilly Circus',
-	latLang: new google.maps.LatLng(51.5096, -0.1346)
+	lat: 51.5096, 
+	lon: -0.1346
 }];
 
+// let knockout work its magic
 ko.applyBindings(new PlacePageModel(places));
 
 // This initializes the Google Maps section, and puts markers for all the places
-initialize = function() {
+var initialize = function() {
 	var mapCanvas = document.getElementById('map-canvas');
 	// coordinates of central London
 	var myLatLng = new google.maps.LatLng(51.5067, -0.1428);
@@ -182,7 +192,7 @@ initialize = function() {
 	var numPlaces = places.length;
 	for (i = 0; i < numPlaces; i ++) {
 		var marker = new google.maps.Marker({
-			position: places[i].latLang,
+			position: new google.maps.LatLng(places[i].lat, places[i].lon),
 			map: map,
 			title: places[i].name
 		});
@@ -195,4 +205,9 @@ initialize = function() {
 	};
 };
 
-google.maps.event.addDomListener(window, 'load', initialize);
+// in case google maps fails to load, user will see error message
+try {
+	google.maps.event.addDomListener(window, 'load', initialize);
+} catch(err) {
+	document.getElementById("map-canvas").innerHTML = 'Sorry, cannot load map';
+};

@@ -17,7 +17,6 @@
 
 		<div class="row">
 			<div class="col-md-4">
-			
 				<p>Please type the name of a place from the list below to filter</p>
 				<div data-bind="foreach: filter.filters">
 					<form data-bind="if: Type == 'text'">
@@ -28,23 +27,19 @@
 				<h3>Key places!</h3>
 				<p>click to see Wikipedia articles</p>
 				<ul id="placeNames" data-bind="foreach: pager.currentPageRecords">
-					<li id="poi" data-bind="text: name, click: $parent.loadData"></li>
+					<li id="poi" data-bind="text: name, click: $parent.loadData, $parent.setPlace"></li>
 				</ul>
 				
 				<div class="wikipedia-container">
-				<h3 id="wikipedia-header">Relevant Wikipedia Articles</h3>
-				<div data-bind="with: currentPlace">
-					<h4 id="poi" data-bind="text: name"></h4>
-				</div>
-				
-				<ul id="wikipedia-links"></ul>
+					<h3>Relevant Wikipedia Articles</h3>
+					<ul id="wikipedia-links"></ul>
 				</div>
 			</div>
-			<div class="col-md-8" id="map-canvas"></div>
+			
+			<div class="col-md-7" id="map-canvas"></div>
 		</div>
-
-
 	</div>
+	
 	<script src="js/libs/jquery-1.11.3.js"></script>
 	<script src="js/libs/knockout-3.2.0.js"></script>
 	<script src="js/app.js"></script>
