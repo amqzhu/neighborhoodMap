@@ -15,35 +15,29 @@
 			<h2 id="greeting" class="greeting">Where do you want to explore?</h2>
 		</div>
 
-		<div class="row" data-bind="with: currentPlace">
-			<h2 data-bind="text: name"></h2>
-		</div>
-		
 		<div class="row">
 			<div class="col-md-4">
-			<!--
-				<p>Please type the name of a place from the list below</p>
-				<form id="form-container" class="form-container" data-bind="textInput: setPlace">
-					<label for="poi">Point of Interest: </label><input type="text" id="poi" value="">
-					<button id="submit-btn">Submit</button>
-				</form>
--->
+			
+				<p>Please type the name of a place from the list below to filter</p>
 				<div data-bind="foreach: filter.filters">
-					<div>
-						<span data-bind="text: Name"></span>:<br />
-					</div>
-					<div data-bind="if: Type == 'text'">
+					<form data-bind="if: Type == 'text'">
 						<input type="text" data-bind="value: Value, valueUpdate: 'afterkeydown'" />
-					</div>
+					</form>
 				</div>
+				
 				<h3>Key places!</h3>
-				<ul data-bind="foreach: placeList">
-					<li data-bind="text: name, click: $parent.setPlace"></li>
+				<p>click to see Wikipedia articles</p>
+				<ul id="placeNames" data-bind="foreach: pager.currentPageRecords">
+					<li id="poi" data-bind="text: name, click: $parent.loadData"></li>
 				</ul>
 				
 				<div class="wikipedia-container">
 				<h3 id="wikipedia-header">Relevant Wikipedia Articles</h3>
-				<ul id="wikipedia-links">Type in a point of interest above and find relevant Wikipedia articles here!</ul>
+				<div data-bind="with: currentPlace">
+					<h4 id="poi" data-bind="text: name"></h4>
+				</div>
+				
+				<ul id="wikipedia-links"></ul>
 				</div>
 			</div>
 			<div class="col-md-8" id="map-canvas"></div>
