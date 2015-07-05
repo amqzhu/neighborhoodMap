@@ -13,6 +13,11 @@ body {
 	margin-top: 20px;
 }
 
+#poi:hover {
+	font-weight: bold;
+	cursor: pointer;
+}
+
 #map-canvas {
 	height: 500px;
 	border: 5px solid black;

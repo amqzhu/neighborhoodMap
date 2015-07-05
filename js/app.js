@@ -154,22 +154,38 @@ var places = [
 }, 
 {
 	name: 'The British Museum',
-	lat: 51.5192, 
-	lon: -0.1243
+	lat: 51.5195, 
+	lon: -0.1269
 }, 
 {
 	name: 'Royal Albert Hall',
-	lat: 51.4941, 
-	lon: -0.1739
+	lat: 51.5010, 
+	lon: -0.1774 
 }, 
 {
 	name: 'Piccadilly Circus',
 	lat: 51.5096, 
 	lon: -0.1346
+},
+{
+	name: 'Westminster Abbey',
+	lat: 51.4994, 
+	lon: -0.1273
+},
+{
+	name: 'Apollo Victoria Theatre',
+	lat: 51.4956, 
+	lon: -0.1427
+},
+{
+	name: 'Sherlock Holmes Museum',
+	lat: 51.5237, 
+	lon: -0.1585
 }];
 
 // let knockout work its magic
 ko.applyBindings(new PlacePageModel(places));
+
 
 // This initializes the Google Maps section, and puts markers for all the places
 var initialize = function() {
