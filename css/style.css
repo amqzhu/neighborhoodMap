@@ -6,26 +6,57 @@
 }
 
 body {
-	font-family: 'Aclonica', sans-serif;
+	font-family: "Aclonica", sans-serif;
 }
 
 .greeting {
 	margin-top: 20px;
 }
 
-#poi:hover {
+.click:hover ,.poi:hover {
 	font-weight: bold;
 	cursor: pointer;
 }
 
-#map-canvas {
-	height: 500px;
+.map-canvas {
+	height: 450px;
 	border: 5px solid black;
 	margin: 10px;
 }
 
 .wikipedia-container {
-	padding:10px;
-	margin-right: 10px;
+	position: left;
 	background-color: rgba(255,255,255,0.7);
+}
+
+@media all and (orientation:landscape) and (max-device-width: 768px){
+	/* Styles for Landscape screen */
+	.allPlaces {
+		margin-right: -90px;
+	}
+
+	.map-canvas {
+		margin: 5px;
+		height: 350px;
+		width: 60%;
+		float: left;
+	}
+}
+
+@media only screen and (max-device-width: 768px) {
+	h2 {
+		font-size: 16px;
+	}
+
+	h3 {
+		font-size: 12px;
+	}
+
+	p, li, form {
+		font-size: 10px;
+	}
+
+	.map-canvas {
+		height: 350px;
+	}
 }
